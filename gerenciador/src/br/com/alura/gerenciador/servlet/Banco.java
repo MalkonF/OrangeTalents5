@@ -14,7 +14,6 @@ public class Banco {
 		empresa2.setNome("Caelum");
 		lista.add(empresa);
 		lista.add(empresa2);
-
 	}
 
 	public void adiciona(Empresa empresa) {

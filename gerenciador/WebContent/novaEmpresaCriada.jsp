@@ -9,6 +9,5 @@
 	<c:if test="${empty empresa}">
             Nenhuma empresa cadastrada!
         </c:if>
-
 </body>
 </html>

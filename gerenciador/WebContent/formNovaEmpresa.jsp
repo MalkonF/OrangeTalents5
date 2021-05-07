@@ -7,13 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-
 	<form action="${linkServletNovaEmpresa}" method="post">
 
 		Nome: <input type="text" name="nome" /> <input type="submit" /> Data
 		Abertura: <input type="text" name="data" />
 	</form>
-
 </body>
 </html>
 
