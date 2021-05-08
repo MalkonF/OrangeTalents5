@@ -11,11 +11,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-
 	<c:if test="${not empty empresa}">
             Empresa ${ empresa } cadastrada com sucesso!
         </c:if>
-
 
 	Lista de empresas:
 	<br />
