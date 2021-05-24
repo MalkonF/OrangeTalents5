@@ -1,9 +1,12 @@
 package br.com.caelum.leilao.teste;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +41,7 @@ public class TesteAvaliador {
 		leiloeiro.avalia(leilao);
 
 		assertEquals(400.0, leiloeiro.getMaiorLance(), 0.00001);
-		assertEquals(250.0, leiloeiro.getMenorLance(), 0.00001);
+		assertThat(leiloeiro.getMenorLance(), equalTo(250.0));// usando hamcrest p ficar + legível
 	}
 
 	@Test
@@ -93,9 +96,8 @@ public class TesteAvaliador {
 
 		List<Lance> maiores = leiloeiro.getTresMaiores();
 		assertEquals(3, maiores.size());
-		assertEquals(400.0, maiores.get(0).getValor(), 0.00001);
-		assertEquals(300.0, maiores.get(1).getValor(), 0.00001);
-		assertEquals(200.0, maiores.get(2).getValor(), 0.00001);
+
+		assertThat(maiores, hasItems(new Lance(maria, 400), new Lance(joao, 300), new Lance(maria, 200)));
 	}
 
 	@Test
@@ -149,16 +151,17 @@ public class TesteAvaliador {
 		assertEquals(100, maiores.get(1).getValor(), 0.00001);
 	}
 
-	@Test
-	public void deveDevolverListaVaziaCasoNaoHajaLances() {
-		Leilao leilao = new Leilao("Playstation 3 Novo");
+	@Test(expected = RuntimeException.class)
+	public void naoDeveAvaliarLeiloesSemNenhumLanceDado() {
+		// try { podemos usar a anotação acima ao invés do try catch p o teste nao
+		// falhar caso haja uma exceção
+		Leilao leilao = new CriadorDeLeilao().para("Playstation 3 Novo").constroi();
 
-		criaAvaliador();
 		leiloeiro.avalia(leilao);
-
-		List<Lance> maiores = leiloeiro.getTresMaiores();
-
-		assertEquals(0, maiores.size());
+		Assert.fail();// se a exceção não for lançada é pq deu algo errado e o método fail vai iniciar
+		// } catch (RuntimeException e) {
+		System.out.println("deu certo");// deu certo!
+		// }
 	}
 
 }
