@@ -1,5 +1,8 @@
 package br.com.caelum.leilao.dominio.servico;
 
+import static br.com.caelum.leilao.dominio.servico.LeilaoMatcher.temUmLance;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -66,4 +69,17 @@ public class LeilaoTest {
 		assertEquals(2000.0, leilao.getLances().get(0).getValor(), 0.00001);
 		assertEquals(3000.0, leilao.getLances().get(1).getValor(), 0.00001);
 	}
+
+	@Test
+	public void deveReceberUmLanceMatcher() {
+		Leilao leilao = new CriadorDeLeilao().para("Macbook Pro 15").constroi();
+		assertEquals(0, leilao.getLances().size());
+
+		Lance lance = new Lance(new Usuario("Steve Jobs"), 2000);
+		leilao.propoe(lance);
+
+		assertThat(leilao.getLances().size(), equalTo(1));
+		assertThat(leilao, temUmLance(lance));
+	}
+
 }
