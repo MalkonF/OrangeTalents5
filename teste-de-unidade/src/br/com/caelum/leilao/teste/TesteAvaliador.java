@@ -32,26 +32,13 @@ public class TesteAvaliador {
 	@Test
 	public void deveEntenderLancesEmOrdemCrescente() {
 
-		Leilao leilao = new Leilao("Playstation 3 Novo");
+		Leilao leilao = new CriadorDeLeilao().para("Playstation 3 Novo").lance(joao, 250).lance(jose, 300)
+				.lance(maria, 400).constroi();
 
-		leilao.propoe(new Lance(joao, 250.0));
-		leilao.propoe(new Lance(jose, 300.0));
-		leilao.propoe(new Lance(maria, 400.0));
-
-		criaAvaliador();
 		leiloeiro.avalia(leilao);
 
-		System.out.println(leiloeiro.getMaiorLance()); // imprime 400.0
-		System.out.println(leiloeiro.getMenorLance()); // imprime 250.0
-
-		double maiorEsperado = 400;
-		double menorEsperado = 250;
-
-		// System.out.println(maiorEsperado == leiloeiro.getMaiorLance());
-		assertEquals(maiorEsperado, leiloeiro.getMaiorLance(), 0.00001);
-		// System.out.println(menorEsperado == leiloeiro.getMenorLance());
-		assertEquals(menorEsperado, leiloeiro.getMenorLance(), 0.00001);
-
+		assertEquals(400.0, leiloeiro.getMaiorLance(), 0.00001);
+		assertEquals(250.0, leiloeiro.getMenorLance(), 0.00001);
 	}
 
 	@Test
@@ -70,18 +57,13 @@ public class TesteAvaliador {
 	}
 
 	@Test
-	// @Ignore //pq lá no avaliador ele está pegando 3 elementos e aqui só tem um
-	// maiores.subList(0, 3)
 	public void deveEntenderLeilaoComApenasUmLance() {
-		Leilao leilao = new Leilao("Playstation 3 Novo");
+		Leilao leilao = new CriadorDeLeilao().para("Playstation 3 Novo").lance(joao, 1000).constroi();
 
-		leilao.propoe(new Lance(joao, 1000.0));
-
-		criaAvaliador();
 		leiloeiro.avalia(leilao);
 
-		assertEquals(1000.0, leiloeiro.getMaiorLance(), 0.0001);
-		assertEquals(1000.0, leiloeiro.getMenorLance(), 0.0001);
+		assertEquals(1000.0, leiloeiro.getMaiorLance(), 0.00001);
+		assertEquals(1000.0, leiloeiro.getMenorLance(), 0.00001);
 	}
 
 	/*

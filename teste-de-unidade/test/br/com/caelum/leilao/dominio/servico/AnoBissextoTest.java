@@ -12,7 +12,7 @@ public class AnoBissextoTest {
 	public void deveRetornarAnoBissexto() {
 		AnoBissexto anoBissexto = new AnoBissexto();
 		AnoBissexto anoBissexto2 = new AnoBissexto();
-		
+
 		anoBissexto = new AnoBissexto(2016);
 		anoBissexto2 = new AnoBissexto(2012);
 		assertEquals(true, anoBissexto.eAnoBissexto());
@@ -23,7 +23,7 @@ public class AnoBissextoTest {
 	public void naoDeveRetornarAnoBissexto() {
 		AnoBissexto anoBissexto = new AnoBissexto();
 		AnoBissexto anoBissexto2 = new AnoBissexto();
-		
+
 		anoBissexto = new AnoBissexto(2015);
 		anoBissexto2 = new AnoBissexto(2011);
 
