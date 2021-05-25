@@ -179,7 +179,5 @@ public class LeilaoDaoTest {
 		// garantindo que a query funcionou
 		assertEquals(0, leiloes.size());
 	}
-	
-	
 
 }
