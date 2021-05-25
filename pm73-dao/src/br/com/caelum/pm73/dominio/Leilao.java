@@ -14,7 +14,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class Leilao {
 
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
 	private String nome;
 	private Double valorInicial;
@@ -23,14 +24,14 @@ public class Leilao {
 	private Calendar dataAbertura;
 	private boolean usado;
 	private boolean encerrado;
-	@OneToMany(cascade=CascadeType.ALL, orphanRemoval=true, mappedBy="leilao")
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "leilao")
 	private List<Lance> lances;
-	
+
 	public Leilao() {
 		this.lances = new ArrayList<Lance>();
 		this.dataAbertura = Calendar.getInstance();
 	}
-	
+
 	public Leilao(String nome, Double valorInicial, Usuario dono, boolean usado) {
 		this();
 		this.nome = nome;
@@ -50,23 +51,23 @@ public class Leilao {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
-	
+
 	public void setValorInicial(Double valorInicial) {
 		this.valorInicial = valorInicial;
 	}
-	
+
 	public Double getValorInicial() {
 		return valorInicial;
 	}
-	
+
 	public void setDono(Usuario usuario) {
 		this.dono = usuario;
 	}
-	
+
 	public Usuario getDono() {
 		return dono;
 	}
@@ -94,7 +95,7 @@ public class Leilao {
 	public boolean isEncerrado() {
 		return encerrado;
 	}
-	
+
 	public Lance adicionaLance(Lance lance) {
 		lance.setLeilao(this);
 		lances.add(lance);

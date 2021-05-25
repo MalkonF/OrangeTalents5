@@ -6,14 +6,16 @@ import javax.persistence.Id;
 
 @Entity
 public class Usuario {
-	
-	@Id @GeneratedValue
+
+	@Id
+	@GeneratedValue
 	private int id;
 	private String nome;
 	private String email;
 
-	protected Usuario() {}
-	
+	protected Usuario() {
+	}
+
 	public Usuario(String nome, String email) {
 		this.nome = nome;
 		this.email = email;
@@ -22,7 +24,7 @@ public class Usuario {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -43,5 +45,4 @@ public class Usuario {
 		this.id = id;
 	}
 
-	
 }
