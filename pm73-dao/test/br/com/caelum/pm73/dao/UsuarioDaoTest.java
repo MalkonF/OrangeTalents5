@@ -54,10 +54,28 @@ public class UsuarioDaoTest {
 	}
 
 	@Test
+	@Ignore
 	public void deveRetornarNuloSeNaoEncontrarUsuario() {
 		Usuario usuarioDoBanco = usuarioDao.porNomeEEmail("João Joaquim", "joao@joaquim.com.br");
 
 		assertNull(usuarioDoBanco);
+	}
+
+	@Test
+	public void deveDeletarUmUsuario() {
+		Usuario usuario = new Usuario("Mauricio Aniche", "mauricio@aniche.com.br");
+
+		usuarioDao.salvar(usuario);
+		usuarioDao.deletar(usuario);
+
+		// envia tudo para o banco de dados
+		session.flush();
+		session.clear();
+
+		Usuario usuarioNoBanco = usuarioDao.porNomeEEmail("Mauricio Aniche", "mauricio@aniche.com.br");
+
+		assertNull(usuarioNoBanco);
+
 	}
 
 }
