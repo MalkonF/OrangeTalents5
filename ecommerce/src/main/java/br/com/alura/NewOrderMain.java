@@ -1,5 +1,6 @@
 package br.com.alura;
 
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -18,14 +19,21 @@ public class NewOrderMain {
         // registra o topico, a mensagem vai ser enviada pra ele
         var record = new ProducerRecord<>("ECOMMERCE_NEW_ORDER", value, value);
         //envia uma mensagem registrada no kafka
-        producer.send(record, (data, ex) -> {
+        Callback callback = (data, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
             }//offset é o numero de mensagens que vc enviou, cada vez que rodar a app vai enviar uma msg
             System.out.println("sucesso enviando " + data.topic() + ":::partition " + data.partition() + "/ offset " +
                     data.offset() + "/ timestamp " + data.timestamp());
-        }).get();//o get torna o send assincrono
+        };
+        var email = "Thank you for your order! We are processing your order!";
+        var emailRecord = new ProducerRecord<>("ECOMMERCE_SEND_EMAIL", email, email);
+        producer.send(record, callback).get();//o get torna o send assincrono
+        producer.send(emailRecord, callback).get();
+
+
+
     }
 
     private static Properties properties() {
