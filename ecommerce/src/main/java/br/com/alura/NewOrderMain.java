@@ -7,6 +7,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class NewOrderMain {
@@ -14,26 +15,27 @@ public class NewOrderMain {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         //produzir uma msg
         var producer = new KafkaProducer<String, String>(properties());
-        //mensagem que vai mandar para o tópico: id_pedido, id_user, valor_compra
-        var value = "132123,67523,7894589745";
-        // registra o topico, a mensagem vai ser enviada pra ele
-        var record = new ProducerRecord<>("ECOMMERCE_NEW_ORDER", value, value);
-        //envia uma mensagem registrada no kafka
-        Callback callback = (data, ex) -> {
-            if (ex != null) {
-                ex.printStackTrace();
-                return;
-            }//offset é o numero de mensagens que vc enviou, cada vez que rodar a app vai enviar uma msg
-            System.out.println("sucesso enviando " + data.topic() + ":::partition " + data.partition() + "/ offset " +
-                    data.offset() + "/ timestamp " + data.timestamp());
-        };
-        var email = "Thank you for your order! We are processing your order!";
-        var emailRecord = new ProducerRecord<>("ECOMMERCE_SEND_EMAIL", email, email);
-        producer.send(record, callback).get();//o get torna o send assincrono
-        producer.send(emailRecord, callback).get();
+        for (var i = 0; i < 100; i++) {
+            var key = UUID.randomUUID().toString();
 
-
-
+            //mensagem que vai mandar para o tópico: id_pedido, id_user, valor_compra
+            var value = key + ",67523,1234";
+            // registra o topico, a mensagem vai ser enviada pra ele
+            var record = new ProducerRecord<>("ECOMMERCE_NEW_ORDER", key, value);
+            //envia uma mensagem registrada no kafka
+            Callback callback = (data, ex) -> {
+                if (ex != null) {
+                    ex.printStackTrace();
+                    return;
+                }//offset é o numero de mensagens que vc enviou, cada vez que rodar a app vai enviar uma msg
+                System.out.println("sucesso enviando " + data.topic() + ":::partition " + data.partition() + "/ offset " +
+                        data.offset() + "/ timestamp " + data.timestamp());
+            };
+            var email = "Thank you for your order! We are processing your order!";
+            var emailRecord = new ProducerRecord<>("ECOMMERCE_SEND_EMAIL", key, email);
+            producer.send(record, callback).get();//o get torna o send assincrono
+            producer.send(emailRecord, callback).get();
+        }
     }
 
     private static Properties properties() {
