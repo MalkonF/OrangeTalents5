@@ -13,37 +13,17 @@ import java.util.concurrent.ExecutionException;
 public class NewOrderMain {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        //produzir uma msg
-        var producer = new KafkaProducer<String, String>(properties());
-        for (var i = 0; i < 100; i++) {
-            var key = UUID.randomUUID().toString();
+        try (var dispatcher = new KafkaDispatcher()) {
+            for (var i = 0; i < 10; i++) {
 
-            //mensagem que vai mandar para o tópico: id_pedido, id_user, valor_compra
-            var value = key + ",67523,1234";
-            // registra o topico, a mensagem vai ser enviada pra ele
-            var record = new ProducerRecord<>("ECOMMERCE_NEW_ORDER", key, value);
-            //envia uma mensagem registrada no kafka
-            Callback callback = (data, ex) -> {
-                if (ex != null) {
-                    ex.printStackTrace();
-                    return;
-                }//offset é o numero de mensagens que vc enviou, cada vez que rodar a app vai enviar uma msg
-                System.out.println("sucesso enviando " + data.topic() + ":::partition " + data.partition() + "/ offset " +
-                        data.offset() + "/ timestamp " + data.timestamp());
-            };
-            var email = "Thank you for your order! We are processing your order!";
-            var emailRecord = new ProducerRecord<>("ECOMMERCE_SEND_EMAIL", key, email);
-            producer.send(record, callback).get();//o get torna o send assincrono
-            producer.send(emailRecord, callback).get();
+                var key = UUID.randomUUID().toString();
+                var value = key + ",67523,1234";
+                dispatcher.send("ECOMMERCE_NEW_ORDER", key, value);
+
+                var email = "Thank you for your order! We are processing your order!";
+                dispatcher.send("ECOMMERCE_SEND_EMAIL", key, email);
+            }
         }
     }
 
-    private static Properties properties() {
-        var properties = new Properties();
-        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
-        //StringSerializer serializa string para bytes
-        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        return properties;
-    }
 }
