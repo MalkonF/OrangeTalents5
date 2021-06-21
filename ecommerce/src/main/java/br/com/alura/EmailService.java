@@ -7,19 +7,23 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
 
 public class EmailService {
 
     public static void main(String[] args) {
         var emailService = new EmailService();
-        var service = new KafkaService(EmailService.class.getSimpleName(),
+        try (var service = new KafkaService(EmailService.class.getSimpleName(),
                 "ECOMMERCE_SEND_EMAIL",
-                emailService::parse); //vai executar o método parse para cada msg que recebe. Method reference
-        service.run();//roda o run() de KafkaService
+                emailService::parse,
+                String.class,
+                Map.of())) {
+            service.run();
+        }
     }
 
-    private void parse(ConsumerRecord<String,String> record) {
+    private void parse(ConsumerRecord<String, String> record) {
         System.out.println("------------------------------------------");
         System.out.println("Send email");
         System.out.println(record.key());
@@ -37,4 +41,3 @@ public class EmailService {
 
 
 }
-
