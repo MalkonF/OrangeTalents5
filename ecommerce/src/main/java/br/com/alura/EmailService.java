@@ -15,8 +15,8 @@ public class EmailService {
         var emailService = new EmailService();
         var service = new KafkaService(EmailService.class.getSimpleName(),
                 "ECOMMERCE_SEND_EMAIL",
-                emailService::parse);
-        service.run();
+                emailService::parse); //vai executar o método parse para cada msg que recebe. Method reference
+        service.run();//roda o run() de KafkaService
     }
 
     private void parse(ConsumerRecord<String,String> record) {
